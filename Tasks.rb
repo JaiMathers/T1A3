@@ -5,12 +5,7 @@ require 'tty-progressbar'
 
 #Create new task
 def create
-    bar = TTY::ProgressBar.new("Loading... [:bar]", total: 10)
-        20.times do
-        sleep(0.1)
-        bar.advance
-    end
-    system("clear")
+    puts loading
     prompt = TTY::Prompt.new
     prompt.select("Select an option: ") do |menu|
         menu.choice "Create a new task", -> {new_task}
@@ -30,7 +25,7 @@ def task_options
 end
 
 def complete
-    
+
 end
 
 def modify
@@ -39,16 +34,12 @@ end
 
 #Get a quote
 def get_quote
-        bar = TTY::ProgressBar.new("Loading... [:bar]", total: 10)
-        20.times do
-        sleep(0.1)
-        bar.advance
-    end
-end
-
-#Exit check
-def check
+    puts loading
+    system "clear"
+    print @quotes["q1"];
+    puts "\r\n\n\nRemember, we're not born perfect, get out there and give it your best!\r\n\n"
     prompt = TTY::Prompt.new
-    prompt.yes?("Are you sure you want to exit?") #(Y/n)
-    system ("clear")
+    prompt.keypress("Press Enter to return...", keys: [:return])
+    system "clear"
+    puts main
 end
