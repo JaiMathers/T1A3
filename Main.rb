@@ -1,62 +1,58 @@
-#Splash screen
-def splash
-    prompt = TTY::Prompt.new
-    prompt.select("Welcome, select an option: ") do |menu|
-        menu.choice "Login", -> {login}
-        menu.choice "Create Account", -> {create_account}
-        menu.choice "Exit", -> {check}
-    end
-    
+def splash(masterData)
+  prompt = TTY::Prompt.new
+  selected_choice = ""
+  prompt.select("Welcome, select an option: ") do |menu|
+    menu.choice "Login", -> {selected_choice = "login"}
+    menu.choice "Create Account", -> {selected_choice = "register"}
+    menu.choice "Exit", -> {system "clear"}
+  end
+  
+  puts selected_choice
+	if selected_choice == "login"
+		masterData.login(masterData)
+  else
+		masterData.create_user
+	end
+
+  if (masterData.is_logged_in?)
+    dashboard(masterData)
+  else
+    splash(masterData)
+  end
+  # pp masterData
 end
 
-
-#Login
-def login
-    prompt = TTY::Prompt.new
-    $user = prompt.ask("Enter username: ")
-    puts loading
-    #answer = Users.find_by(username: username)
-    # if answer
-    #     $user = answer
-    #     puts "Hello #{$user.light_green}, please wait a moment." 
-    # else
-    #     puts "Username not found"
-    #     puts login
-    # end
-    # system "clear"
+def dashboard(masterData)
+  # system "clear"
+  puts "WE ARE LOGGED IN"
+  # puts "Weclome #{masterData.logged_in_user.fname}"
+  prompt = TTY::Prompt.new
+  selected_choice = ""
+  prompt.select("Welcome, select an option: ") do |menu|
+    menu.choice "Add Taskj", -> {selected_choice = "login"}
+    menu.choice "Remove Task", -> {selected_choice = "register"}
+    menu.choice "Logout", -> {selected_choice = "register"}
+    menu.choice "Exit", -> {system "clear"}
+  end
 end
 
-def create_account
-    
-end
+# def main
+#   system "clear"
+#   prompt = TTY::Prompt.new
+#   prompt.select("=======================\r\nWelcome to Helping Hand\r\n=======================\r\nWhat would you like to do?") do |menu|
+#   menu.choice "Create Task", -> {create_task}
+#   menu.choice "View Tasks", -> {view_task}
+#   menu.choice "Get a Quote", -> {get_quote}
+#   menu.choice "Exit", -> {check}
+#   end
+# end
 
-#Main menu
-def main
-prompt = TTY::Prompt.new
-prompt.select("==========================
- Welcome to Task Manager
-==========================
-What would you like to do?")do |menu|
-        menu.choice "Create Task", -> {create}
-        menu.choice "View Tasks", -> {view_task}
-        menu.choice "Get a Quote", -> {get_quote}
-        menu.choice "Exit", -> {check}
-    end
-end
-
-#Loading bar
-def loading
-    bar = TTY::ProgressBar.new("Loading... [:bar]".yellow, total: 20) 
-        20.times do
-            sleep(0.08)
-            bar.advance
-        end
-    system "clear"
-end
-
-#Exit check
-def check
-    prompt = TTY::Prompt.new
-    prompt.yes?("Are you sure you want to exit?") #(Y/n)
-    system "clear"
-end
+# #Exit check
+# def exit_check
+#   prompt = TTY::Prompt.new
+#   prompt.yes?("Are you sure you want to exit?") do |option| #(Y/n)
+#     # if (option == "")
+#     # system "clear"
+#     pp option 
+#   end
+# end

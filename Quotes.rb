@@ -1,12 +1,32 @@
-quotes = Array.new
-    @quotes = { 
-    "q1" => "Success is not final; failure is not fatal: It is the courage to continue that counts. — Winston S. Churchill",
-    "q2" => "It is better to fail in originality than to succeed in imitation. — Herman Melville",
-    "q3" => "The road to success and the road to failure are almost exactly the same. — Colin R. Davis",
-    "q4" => "Success usually comes to those who are too busy looking for it. — Henry David Thoreau",
-    "q5" => "Develop success from failures. Discouragement and failure are two of the surest stepping stones to success. — Dale Carnegie",
-    "q6" => "Success is peace of mind, which is a direct result of self-satisfaction in knowing you made the effort to become the best of which you are capable. — John Wooden",
-    "q7" => "I never dreamed about success. I worked for it. — Estée Lauder",
-    "q8" => "You learn more from failure than from success. Don't let it stop you. Failure builds character. — Unknown",
-    "q9" => "Experience is a hard teacher because she gives the test first, the lesson afterwards. ― Vernon Sanders Law"
-    }
+#Quotes List (working)
+class Quotes
+    def quote1
+        puts "It is better to fail in originality than to succeed in imitation. — Herman Melville".green
+    end
+    def quote2
+        puts "The road to success and the road to failure are almost exactly the same. — Colin R. Davis".yellow
+    end
+    def quote3
+        puts "You learn more from failure than from success. Don't let it stop you. Failure builds character. — Unknown".blue
+    end
+    def quote4
+        puts "Experience is a hard teacher because she gives the test first, the lesson afterwards. ― Vernon Sanders Law".red
+    end
+end
+#Quotes Feature (working)
+def get_quote
+    system "clear"
+    quotes = Quotes.new
+    prompt = TTY::Prompt.new
+    prompt.select("Pick a number: ") do |menu|
+        menu.choice "1", -> {quotes.quote1} 
+        menu.choice "2", -> {quotes.quote2}
+        menu.choice "3", -> {quotes.quote3}
+        menu.choice "4", -> {quotes.quote4}
+    end
+    
+    prompt = TTY::Prompt.new
+    prompt.keypress("Press Enter to return...", keys: [:return])
+    system "clear"
+    puts main
+end
