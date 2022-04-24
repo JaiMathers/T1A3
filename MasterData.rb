@@ -15,10 +15,10 @@ class MasterData
 
   def create_user 
    prompt = TTY::Prompt.new()
-   username = prompt.ask("Enter username: ")
-   password = prompt.mask("Enter password: ")
+   username = prompt.ask("Enter username: ", required: true)
+   password = prompt.mask("Enter password: ", required: true)
    password = BCrypt::Password.create(password)
-   fname = prompt.ask("Enter your first name: ")
+   fname = prompt.ask("Enter your first name: ", required: true)
    user = User.new(username, password, fname) #creates new user object
    @master_data << user  #puts user data into @master_data
    @logged_in_user = user #reassigns user to @logged_in_user variable
@@ -28,8 +28,8 @@ class MasterData
  def login
   system "clear"
   prompt = TTY::Prompt.new()
-  username = prompt.ask("Enter username: ")
-  password = prompt.mask("Enter password: ")
+  username = prompt.ask("Enter username: ", required: true)
+  password = prompt.mask("Enter password: ", required: true)
 
   error_msg = "INCORRECT USER OR PASSWORD"
 
@@ -68,8 +68,8 @@ class MasterData
   # TASK METHODS
   def create_task
    prompt = TTY::Prompt.new() #creates new task object
-   name = prompt.ask("Enter Task name: ")
-   desc = prompt.ask("Enter Task Description: ")
+   name = prompt.ask("Enter Task name: ", required: true)
+   desc = prompt.ask("Enter Task Description: ", required: true)
    task = Task.new(name, desc) #assigns to variable
    @logged_in_user.tasks << task #stores task into the logged in user's task list
    save()
@@ -94,8 +94,8 @@ class MasterData
 
  def edit_task(index)
   prompt = TTY::Prompt.new() #creates new task object
-  name = prompt.ask("Enter Task name: ")
-  desc = prompt.ask("Enter Task Description: ")
+  name = prompt.ask("Enter Task name: ", required: true)
+  desc = prompt.ask("Enter Task Description: ", required: true)
 
   task = @logged_in_user.tasks[index]
   task.name = name

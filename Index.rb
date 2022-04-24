@@ -12,4 +12,11 @@ require_relative("./MasterData.rb")
 
 masterData = MasterData.new()
 
+bar = TTY::ProgressBar.new("Loading...[:bar]".light_green, total: 20)
+20.times do
+  sleep(0.1)
+  bar.advance
+  system "clear"
+end
+
 splash(masterData)

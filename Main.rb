@@ -1,7 +1,6 @@
 require_relative "./Quotes.rb"
 
 def splash(masterData)
-  pp masterdata
   prompt = TTY::Prompt.new
   selected_choice = ""
   prompt.select("Welcome, select an option: ") do |menu|
@@ -10,24 +9,22 @@ def splash(masterData)
     menu.choice "Exit", -> {system "clear"}
   end
   
-  puts selected_choice
-	if selected_choice == "login"
+  if selected_choice == "login"
 		masterData.login
-  else
+  elsif selected_choice == "register"
 		masterData.create_user
+  else
+    system "clear"
 	end
 
   if (masterData.is_logged_in?)
     dashboard(masterData)
-  else
-    splash(masterData)
   end
-  # pp masterData
 end
 
 def dashboard(masterData)
   system "clear"
-  puts "Welcome #{masterData.logged_in_user.fname}"
+  puts "=================================\n  Welcome to Task Tracker, #{masterData.logged_in_user.fname}  \n================================="
   prompt = TTY::Prompt.new
   selected_choice = ""
   prompt.select("Select an option: ") do |menu|
@@ -42,7 +39,6 @@ def dashboard(masterData)
   case selected_choice
   when "view"
     system "clear"
-    # masterData.view_tasks
     view_tasks(masterData)
     dashboard(masterData)
   when "view_completed"
@@ -55,14 +51,15 @@ def dashboard(masterData)
     get_quote()
     dashboard(masterData)
   when "logout"
-    puts "WE ARE LOGGING OUT"
     masterData.logged_in_user = nil
+    system "clear"
+    puts "You have been logged out."
     splash(masterData)
   when "exit"
     system "clear"
-  else
-    puts "WHAT ARE YOU????????? #{selected_choice}"
-    dashboard(masterData)
+  # else
+  #   puts "WHAT ARE YOU????????? #{selected_choice}"
+  #   dashboard(masterData)
   end
 end
 
@@ -75,7 +72,7 @@ def view_tasks(masterData)
     prompt = TTY::Prompt.new
     selected_choice = ""
     prompt.select("Select an option: ") do |menu|
-      menu.choice "next", -> {selected_choice = "next"}
+      menu.choice "Next", -> {selected_choice = "next"}
       menu.choice "Mark as complete", -> {selected_choice = "complete"}
       menu.choice "Delete Task", -> {selected_choice = "delete"}
       menu.choice "Edit Task", -> {selected_choice = "edit"}
@@ -104,7 +101,7 @@ def view_completed_tasks(masterData)
     selected_choice = ""
     prompt.select("Select an option: ") do |menu|
       menu.choice "Delete Task", -> {selected_choice = "delete"}
-      menu.choice "next", -> {selected_choice = "next"}
+      menu.choice "Next", -> {selected_choice = "next"}
     end
 
     case selected_choice
@@ -112,7 +109,7 @@ def view_completed_tasks(masterData)
       masterData.delete_completed_task(index)
       dashboard(masterData)
     when "next"
-      puts "NEXT"
+      puts "next"
       dashboard(masterData)
     end
   }
