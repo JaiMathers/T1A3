@@ -1,4 +1,6 @@
 require 'tty-prompt'
+require 'json'
+require 'bcrypt'
 
 class MasterData 
   attr_accessor :master_data, :logged_in_user #enables read and write access for master_data and logged_in_user
@@ -6,19 +8,24 @@ class MasterData
   def initialize() #activates instance variables @master_data and @logged_in _user
    @master_data = []
    @logged_in_user = nil
- end
+   load()
+  end
+
+ # USER METHODS
 
   def create_user 
    prompt = TTY::Prompt.new()
    username = prompt.ask("Enter username: ")
    password = prompt.mask("Enter password: ")
+   password = BCrypt::Password.create(password)
    fname = prompt.ask("Enter your first name: ")
    user = User.new(username, password, fname) #creates new user object
    @master_data << user  #puts user data into @master_data
    @logged_in_user = user #reassigns user to @logged_in_user variable
+   save()
  end
 
- def login(masterData)
+ def login
   system "clear"
   prompt = TTY::Prompt.new()
   username = prompt.ask("Enter username: ")
@@ -29,8 +36,8 @@ class MasterData
   user_index = get_user(username)
 
   if user_index #example of circumventing error
-    user = masterData.master_data[user_index]
-    if (user.password == password)
+    user = @master_data[user_index]
+    if (BCrypt::Password.new(user.password) == password)
       puts "WE HAVE LOGGED IN #{user.fname}"
       @logged_in_user = user
     else
@@ -58,11 +65,67 @@ class MasterData
     return nil
   end
 
- def create_task
+  # TASK METHODS
+  def create_task
    prompt = TTY::Prompt.new() #creates new task object
    name = prompt.ask("Enter Task name: ")
    desc = prompt.ask("Enter Task Description: ")
    task = Task.new(name, desc) #assigns to variable
    @logged_in_user.tasks << task #stores task into the logged in user's task list
+   save()
  end
+
+ def mark_as_complete(index)
+  task = @logged_in_user.tasks[index]
+  @logged_in_user.completed_tasks << task
+  @logged_in_user.tasks.delete_at(index)
+  save()
+ end
+
+ def delete_task(index)
+  @logged_in_user.tasks.delete_at(index)
+  save()
+ end
+
+ def delete_completed_task(index)
+  @logged_in_user.completed_tasks.delete_at(index)
+  save()
+ end
+
+ def edit_task(index)
+  prompt = TTY::Prompt.new() #creates new task object
+  name = prompt.ask("Enter Task name: ")
+  desc = prompt.ask("Enter Task Description: ")
+
+  task = @logged_in_user.tasks[index]
+  task.name = name
+  task.desc = desc
+  save()
+ end
+
+ def load
+  if (File.exists?("db.json"))
+    raw_data = File.read("db.json")
+    data = JSON.parse(raw_data, create_additions: true)
+    data.each { |user| 
+      new_user = User.new(user["username"], user["password"], user["fname"])
+      new_user.tasks = JSON.parse(user["tasks"])
+      new_user.completed_tasks = JSON.parse(user["completed_tasks"])
+
+      @master_data << new_user
+    }
+
+  else
+    newdb = File.new("./db.json", 'w+')
+    tmp = []
+    newdb.syswrite(tmp.to_json)
+  end
+ end
+
+ def save
+  file = File.open("db.json", "w+")
+  file.syswrite(@master_data.to_json)
+ end
+ 
+
 end

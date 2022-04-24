@@ -1,1 +1,8 @@
-"#<User:0x00007fffdd9857d0>"
+[{
+  "json_class": "User",
+  "username": "User1",
+  "password": "$2a$12$gl36RVG0s.GacZutCGj5ju.lm3RyOhaBaqk1Vzh6JWv05tac4ZIhq",
+  "fname": "123",
+  "tasks": "[\"Task: Task2 \\n Description: desc2\",\"Task: Task3 \\n Description: desc3\"]",
+  "completed_tasks": "[\"Task: Task1 \\n Description: desc1\"]"
+}]

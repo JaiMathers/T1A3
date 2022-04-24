@@ -5,6 +5,10 @@ class Task
       @name = name
       @desc = desc
     end
+
+    def to_s
+      return "Task: #{@name} \n Description: #{@desc}"
+    end
 end
 # #Create new task
 # def create

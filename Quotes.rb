@@ -28,5 +28,4 @@ def get_quote
     prompt = TTY::Prompt.new
     prompt.keypress("Press Enter to return...", keys: [:return])
     system "clear"
-    puts main
 end

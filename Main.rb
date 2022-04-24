@@ -1,4 +1,7 @@
+require_relative "./Quotes.rb"
+
 def splash(masterData)
+  pp masterdata
   prompt = TTY::Prompt.new
   selected_choice = ""
   prompt.select("Welcome, select an option: ") do |menu|
@@ -9,7 +12,7 @@ def splash(masterData)
   
   puts selected_choice
 	if selected_choice == "login"
-		masterData.login(masterData)
+		masterData.login
   else
 		masterData.create_user
 	end
@@ -23,36 +26,95 @@ def splash(masterData)
 end
 
 def dashboard(masterData)
-  # system "clear"
-  puts "WE ARE LOGGED IN"
-  # puts "Weclome #{masterData.logged_in_user.fname}"
+  system "clear"
+  puts "Welcome #{masterData.logged_in_user.fname}"
   prompt = TTY::Prompt.new
   selected_choice = ""
-  prompt.select("Welcome, select an option: ") do |menu|
-    menu.choice "Add Taskj", -> {selected_choice = "login"}
-    menu.choice "Remove Task", -> {selected_choice = "register"}
-    menu.choice "Logout", -> {selected_choice = "register"}
-    menu.choice "Exit", -> {system "clear"}
+  prompt.select("Select an option: ") do |menu|
+    menu.choice "View Tasks", -> {selected_choice = "view"}
+    menu.choice "View Completed Tasks", -> {selected_choice = "view_completed"}
+    menu.choice "Add Task", -> {selected_choice = "add"}
+    menu.choice "Quotes", -> {selected_choice = "quote"}
+    menu.choice "Logout", -> {selected_choice = "logout"}
+    menu.choice "Exit", -> {selected_choice = "exit"}
+  end
+
+  case selected_choice
+  when "view"
+    system "clear"
+    # masterData.view_tasks
+    view_tasks(masterData)
+    dashboard(masterData)
+  when "view_completed"
+    view_completed_tasks(masterData)
+    dashboard(masterData)
+  when "add"
+    masterData.create_task
+    dashboard(masterData)
+  when "quote"
+    get_quote()
+    dashboard(masterData)
+  when "logout"
+    puts "WE ARE LOGGING OUT"
+    masterData.logged_in_user = nil
+    splash(masterData)
+  when "exit"
+    system "clear"
+  else
+    puts "WHAT ARE YOU????????? #{selected_choice}"
+    dashboard(masterData)
   end
 end
 
-# def main
-#   system "clear"
-#   prompt = TTY::Prompt.new
-#   prompt.select("=======================\r\nWelcome to Helping Hand\r\n=======================\r\nWhat would you like to do?") do |menu|
-#   menu.choice "Create Task", -> {create_task}
-#   menu.choice "View Tasks", -> {view_task}
-#   menu.choice "Get a Quote", -> {get_quote}
-#   menu.choice "Exit", -> {check}
-#   end
-# end
+def view_tasks(masterData)
+  masterData.logged_in_user.tasks.each_with_index {|task, index| 
+    system "clear"
 
-# #Exit check
-# def exit_check
-#   prompt = TTY::Prompt.new
-#   prompt.yes?("Are you sure you want to exit?") do |option| #(Y/n)
-#     # if (option == "")
-#     # system "clear"
-#     pp option 
-#   end
-# end
+    puts task.to_s
+
+    prompt = TTY::Prompt.new
+    selected_choice = ""
+    prompt.select("Select an option: ") do |menu|
+      menu.choice "next", -> {selected_choice = "next"}
+      menu.choice "Mark as complete", -> {selected_choice = "complete"}
+      menu.choice "Delete Task", -> {selected_choice = "delete"}
+      menu.choice "Edit Task", -> {selected_choice = "edit"}
+    end
+
+    case selected_choice
+    when "complete"
+      masterData.mark_as_complete(index)
+    when "delete"
+      masterData.delete_task(index)
+    when "edit"
+      masterData.edit_task(index)
+    when "next"
+      puts "next"      
+    end
+  }
+end
+
+def view_completed_tasks(masterData)
+  masterData.logged_in_user.completed_tasks.each_with_index {|task, index| 
+    system "clear"
+
+    puts task.to_s
+
+    prompt = TTY::Prompt.new
+    selected_choice = ""
+    prompt.select("Select an option: ") do |menu|
+      menu.choice "Delete Task", -> {selected_choice = "delete"}
+      menu.choice "next", -> {selected_choice = "next"}
+    end
+
+    case selected_choice
+    when "delete"
+      masterData.delete_completed_task(index)
+      dashboard(masterData)
+    when "next"
+      puts "NEXT"
+      dashboard(masterData)
+    end
+  }
+end
+
