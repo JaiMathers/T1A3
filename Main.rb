@@ -65,6 +65,9 @@ def dashboard(masterData)
     rescue SystemExit
     end
     system "clear"
+  # else     #printing what type the selected choice is () [] {}
+  #   puts "WHAT ARE YOU????????? #{selected_choice}"
+  #   dashboard(masterData)
   end
 end
 

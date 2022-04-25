@@ -1,4 +1,4 @@
-#Quotes List (working)
+#Quotes List
 class Quotes
     def quote1
         puts "It is better to fail in originality than to succeed in imitation. — Herman Melville".green
@@ -13,7 +13,7 @@ class Quotes
         puts "Experience is a hard teacher because she gives the test first, the lesson afterwards. ― Vernon Sanders Law".red
     end
 end
-#Quotes Feature (working)
+#Quotes Feature
 def get_quote
     system "clear"
     quotes = Quotes.new
