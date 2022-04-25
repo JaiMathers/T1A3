@@ -3,6 +3,7 @@ require 'colorize'
 require 'tty-prompt'
 require 'tty-progressbar'
 require 'json'
+require 'bcrypt'
 #.rb Pages
 require_relative("./Main.rb")
 require_relative("./Users.rb")

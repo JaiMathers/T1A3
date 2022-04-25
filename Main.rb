@@ -57,9 +57,6 @@ def dashboard(masterData)
     splash(masterData)
   when "exit"
     system "clear"
-  # else
-  #   puts "WHAT ARE YOU????????? #{selected_choice}"
-  #   dashboard(masterData)
   end
 end
 
