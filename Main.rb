@@ -6,14 +6,18 @@ def splash(masterData)
   prompt.select("Welcome, select an option: ") do |menu|
     menu.choice "Login", -> {selected_choice = "login"}
     menu.choice "Create Account", -> {selected_choice = "register"}
-    menu.choice "Exit", -> {system "clear"}
+    menu.choice "Exit", -> {selected_choice = "exit"}
   end
   
   if selected_choice == "login"
 		masterData.login
   elsif selected_choice == "register"
 		masterData.create_user
-  else
+  else selected_choice == "exit"
+    begin
+      exit
+    rescue SystemExit
+    end
     system "clear"
 	end
 
@@ -56,6 +60,10 @@ def dashboard(masterData)
     puts "You have been logged out."
     splash(masterData)
   when "exit"
+    begin
+      exit
+    rescue SystemExit
+    end
     system "clear"
   end
 end

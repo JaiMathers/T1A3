@@ -31,14 +31,14 @@ class MasterData
     username = prompt.ask("Enter username: ", required: true)
     password = prompt.mask("Enter password: ", required: true)
 
-    error_msg = "INCORRECT USER OR PASSWORD"
+    error_msg = "Incorrect Username or Password"
 
     user_index = get_user(username)
 
-    if user_index #example of circumventing error
+    if user_index #using bcrypt to validate password
       user = @master_data[user_index]
       if (BCrypt::Password.new(user.password) == password)
-        puts "WE HAVE LOGGED IN #{user.fname}"
+        puts "Logged in #{user.fname}"
         @logged_in_user = user
       else
         puts error_msg
@@ -126,6 +126,4 @@ class MasterData
     file = File.open("db.json", "w+")
     file.syswrite(@master_data.to_json)
   end
- 
-
 end
