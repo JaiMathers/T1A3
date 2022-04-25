@@ -11,3 +11,5 @@ gem "tty-progressbar", "~> 0.18.2"
 gem "colorize", "~> 0.8.1"
 
 gem "json", "~> 2.6"
+
+gem "bcrypt", "~> 3.1"
